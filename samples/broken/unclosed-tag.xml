@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<layout>
+  <panel name="header">
+    <image src="a.png"/>
+  </panel>
+  <panel name="body">
+    <image src="b.png">
+  </panel>
+</layout>

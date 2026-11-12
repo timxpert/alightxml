@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A made-up schema: element names must not be used to guess which values are images. -->
+<catalog xmlns="urn:example:catalog">
+  <brand>
+    <name>Oak &amp; Iron</name>
+    <logo src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABCklEQVR4Xu2aQRLCIAxFxfGYehNd6U30nnVSBwcjZUyK/KSTt2XBf3woHWvaNTgfp6k1PorbI6WluaoDVoJzaiIfAlaDt0T2edBLeKLM+hbwyizgafX5jnHfQPK4+iXuGwgBNNEAmmgAjbqB6x0d/YVKIIe3ICEW4KHREmKBy+l76yAlxAKEJQmVgCUJtYAViVUCFiRWC6AlugjUJGoH/R90E0DdD10EavfAqAYOa2pdusBGhVe/CxEWwhOqBpBbhiMW0IT/9V1Js/XEh5hPopm0J2KB8pmPDk/EL3NoVFvIEiGAJhpA47+B1kdk61B2/w3QKntsIWfeRgPeWih3zLb+7MGx8g25dUafu99RhnHm/s0AAAAASUVORK5CYII="/>
+  </brand>
+  <product sku="CH-001">
+    <title>Lounge chair</title>
+    <imageCaption>Product image of the lounge chair</imageCaption>
+    <imageCount>2</imageCount>
+    <thumbnail>images/chair.jpg</thumbnail>
+    <photo encoding="base64">
+iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAD00lEQVR4Xu3dYXLTMBDF8abDJbga
+HAOOAceAq3GMdlxGHUexo5W0kt5bv99niGX9vY4Dodxegvn26+2t55T+/rzden4/GuqT6Y1pxRyd
+KvCsoCVMweEDo0Q9gx4bMjB6VKbYUIFZw+aQphoicJSwiKGXBo4aFin0ksBXCYsQ+rX0kcDbVeNu
+Vpz7tAlecXLIZj2ITZlgxX00a0+GB551Ioxm7M2wW/SMxUcy6pY9ZIIVt96oPXMPPGqhVzBi71wD
+j1jg1XjvoVtg74VdmedeugT2XJD857Wn3YG9FiJjPit3BVbc8Xr3uDlw74HFrmevmwL3HFDatO55
+U2DhUR249UqSfi17XxW45QDiq7aBOXDtC8s4NS3MgYWTKXDNFSNzWJsUA1tfSOaztCkGFm5PA1uu
+EFmr1EgTHNxp4NKVITietdIEB3cYWNPL56zZF75TqfPnx8u/0u/4/vvla+nXsHr4XjT79FqCljAH
+z79fHWaCPcIm6bWYQyf0gT3D5iKEvnvIYrs9j4y7N+s4HvKGlBO8YsNZp5nuc/CKuKzTvPkMzHB7
+Xh03fwhDtW9JM8EocVkiJxSB0eIyRaYILO0+AiO//6JOL/oUp6bQE4weFz3y3VO0xAQ7wSzTiz7F
+sIHFxw3xAYttevfQ/gZKExycAgenwMHBBWZ+/92grR8usPhS4OAUODgFDk6Bg1Pg4BQ4OAUODi4w
+2h/W10JbP1xg8aXAwb2O+u9cZL2tLeQEo72PWSGuGzKw+IENjDgNz6CuFzaw+PgIjPqghToVOcR1
+pqbwE4y4eXvo64MPLH0oAqNOCeq69j4Do74PJ2ibibaevX1LiglGi4wcN0cVeLN6c1cfvxb1jzKc
++R1klrD5Wy3dBK/4iMIS9wjlD0I7ijximpnDJg+36A3iPym18gjNGvbokxD9BOfyOJbgrEEtDieY
+fYqv6Gh6N9QPWVJ2GvjsihA8z1ppgoN7GlhTjK/USBMcXDFw6QqRdSxtioE3lheSuaxNTIGFlzmw
+9YqR8WpamAPrVo2hJu6mKrAir1UbtymwcKmeYE3xGi3T2zXBrQeUej173TTBSc+BxaZ3j7sC63Y9
+Vm/crlv0nsdC5J7XnnZPsG7X/rziuk2wIvvxjOseWO/JfbzjDgmsyG1GxN2cfqvSC/N3rGcYFTZx
+e8g6M/oEmM3Ym+GBdcs+NiPulFt07uq37Flhp92ic7NPEMmKcx/+kPXMVaZ5RdhkaeAkauiVYaEC
+RwuNEBYyMHtopLDQgffQb9+IUfcg3oOtUGKjR6UNvOozNVPQHNUEW/ROOXPMI+8/dHufQ+H+YwAA
+AABJRU5ErkJggg==
+    </photo>
+    <manual href="docs/manual.pdf"/>
+    <swatch>images/notreally.png</swatch>
+  </product>
+</catalog>

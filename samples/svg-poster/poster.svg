@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     width="1080" height="1350" viewBox="0 0 1080 1350">
+  <title>Summer Launch poster</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b1035"/>
+      <stop offset="1" stop-color="#0b0b14"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8b6cff" stop-opacity="0.9"/>
+      <stop offset="0.6" stop-color="#5b3fd6" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#5b3fd6" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      .headline { font-family: 'Archivo Black', sans-serif; font-size: 96px; fill: #ffffff; }
+      .body { font-family: Inter, sans-serif; font-size: 34px; fill: #c9c3e6; }
+    </style>
+  </defs>
+  <inkscape:metadata-note>exported by an editor</inkscape:metadata-note>
+
+  <!-- Background and decoration -->
+  <rect id="Background" x="0" y="0" width="1080" height="1350" fill="url(#bg)"/>
+  <circle id="Glow" cx="820" cy="300" r="320" fill="url(#glow)"/>
+  <rect id="Card" x="90" y="420" width="900" height="560" rx="36" fill="#ffffff" fill-opacity="0.06"/>
+
+  <!-- Relative path, resolved against this file's folder -->
+  <image id="Hero photo" x="130" y="460" width="820" height="480" href="assets/photo.jpg" preserveAspectRatio="xMidYMid slice"/>
+
+  <!-- Nested, transformed group with a logo -->
+  <g id="Brand" transform="translate(90 90)">
+    <g id="Logo group" transform="rotate(-8 64 64)" opacity="0.95">
+      <image id="Logo" x="0" y="0" width="128" height="128" xlink:href="assets/logo.png"/>
+    </g>
+    <text id="Brand name" x="160" y="84" style="font-family: Inter; font-size: 44px; font-weight: 700; fill: #ffffff">Northwind</text>
+  </g>
+
+  <text class="headline" x="90" y="1110">Summer</text>
+  <text class="headline" x="90" y="1210" fill="#8b6cff">Launch <tspan x="90" dy="100">2026</tspan></text>
+  <text class="body" x="990" y="1300" text-anchor="end">Doors open 7 PM · Pier 9</text>
+
+  <!-- Base64 data URI -->
+  <image id="Inline badge" x="900" y="80" width="96" height="96" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAB9ElEQVR4Xu2b3VHEMAyECUMTVAIPUBAUBAXBA1RCGTBmxkzO2JGs7Mo/4+/5YntXa/mS3G1XTjx8vHzXTPV+/7zVfN4KbZJawRIsQ+AGoIWnoI2AGcAWzjLitAHewtFGmA1oLRxlxLXUfHL0Jj5gXVO1AdaJPLCsTb0FLIO3RHtaqBIwmviaLSEaMKL4iGbtogGzc2iAxsHekTQUDZAuHIkjLVkDZhIv9YPVA9Ioz1j9oxSsBOwTMHP1Sym4adHN3+6evnLzPn6+3nqv5+9egF39kugSbDPivYJLD6gVH7BcY+E3Aazqo0Sw0hBSQEsASjw7DTQDRoFiALL6EcaYgQ29/1kLjaD7ASUBI7EMQFaLHX/GiQA1YESWASNWDckyAOnmiEANQH9JyYGeA2rAiCwDtG9RtaAjugc9Nu15AHqhAcaYgbUFtNGuBVkx5FgpLk+FrTdJTOGuT4UtQizXWLj4jRD66VCJ1i9G9idfkzdDXtXVcNEE0d8JeiTVSDsFRuGfATOnIKdtJSAX1RlTUNJUTMBMJhxpOdwCM5ggaVg9QDquJAd7RrN20YCAZqDe0K5Z/X+BiNf9ghWt8IgqAXtqJ/DEsrZqA3rdEhbxgeotkNJ6S1iFR04b0Ko3nBUON8DLCJRwmgEsI9DC6Qac7RUswSk/uWzO/J2Xg50AAAAASUVORK5CYII="/>
+
+  <!-- Letter case differs from the file on disk (Badge.PNG) -->
+  <image id="Badge" x="910" y="1110" width="80" height="80" href="assets/badge.png"/>
+
+  <!-- Absolute path from the designer's computer; only matched by file name -->
+  <image id="Texture" x="760" y="760" width="160" height="160" opacity="0.5" href="C:\Users\designer\Pictures\texture.png"/>
+
+  <!-- Missing on purpose -->
+  <image id="Sponsor logo" x="560" y="1120" width="160" height="60" href="assets/sponsor.png"/>
+
+  <!-- Remote image: only loaded after the user allows remote images -->
+  <image id="Map" x="740" y="1120" width="150" height="60" href="https://example.com/images/venue-map.png"/>
+
+  <!-- Vector shapes -->
+  <ellipse id="Orb" cx="980" cy="560" rx="40" ry="28" fill="#ffcc66"/>
+  <polygon id="Spark" points="1000,700 1012,730 1044,734 1020,754 1028,786 1000,768 972,786 980,754 956,734 988,730" fill="#ff7a59">
+    <animateTransform attributeName="transform" type="rotate" from="0 1000 744" to="360 1000 744" dur="4s" repeatCount="indefinite"/>
+  </polygon>
+  <path id="Wave" d="M90 1000 C 300 940, 500 1060, 720 1000 S 990 950, 990 1000 L 990 1020 L 90 1020 Z" fill="#8b6cff" fill-opacity="0.35"/>
+  <line id="Divider" x1="560" y1="1240" x2="990" y2="1240" stroke="#3b3360" stroke-width="2"/>
+  <rect id="Fade-in tag" x="760" y="430" width="200" height="56" rx="0" fill="#ff7a59" transform="rotate(6 860 458)">
+    <animate attributeName="opacity" from="0" to="1" dur="1.2s" begin="0s"/>
+  </rect>
+</svg>

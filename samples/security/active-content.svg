@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" onload="alert('svg onload')">
+  <script>alert('script element')</script>
+  <rect width="400" height="200" fill="#222"/>
+  <foreignObject x="0" y="0" width="400" height="200"><div xmlns="http://www.w3.org/1999/xhtml" onclick="alert(1)">html</div></foreignObject>
+  <image x="0" y="0" width="10" height="10" href="javascript:alert(1)"/>
+  <text x="20" y="110" fill="#fff" font-size="28">Scripts never run</text>
+</svg>
