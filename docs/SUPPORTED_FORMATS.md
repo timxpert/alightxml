@@ -6,6 +6,7 @@ Only structures listed here have been tested. Each has a sample in `samples/` an
 
 | Adapter | Detected when | Images found in | Layout / conversion |
 |---|---|---|---|
+| Alight Motion | root `<scene>` with `ffver` / `amver` | `<media uri>` and layer `fillImage` (`data:`, `content://` matched by the recorded file name, `am-internal:///` matched by name, URLs) | Canvas view (static, first keyframe); `.rect` with size × scale, contours, text, groups, gradients |
 | SVG | root `<svg>` in `http://www.w3.org/2000/svg` (or with no namespace, with a warning) | `<image>` / `<feImage>` `href` or `xlink:href` | Yes: canvas + Alight Motion |
 | FB2 | root `<FictionBook>` in the FictionBook 2.0 namespace | `<binary id content-type>` Base64, referenced by `<image l:href="#id">` | Images only |
 | Android | any attribute in `http://schemas.android.com/apk/res/android` | attribute values `@drawable/…`, `@mipmap/…` (incl. `app:` attributes) | Images only |
@@ -46,3 +47,6 @@ Reported, not interpreted: `clip-path`, `mask`, `filter`, `pattern` fills, `fore
 | `catalog/` | Unknown schema: `<thumbnail>` path, `<photo>` Base64 and a data URI detected; `<imageCaption>`, `<imageCount>` and a PDF ignored; `notreally.png` rejected as plain text. |
 | `security/` | XXE and billion-laughs parse safely with warnings; scripts never run. |
 | `broken/` | Mismatched tag at line 8; unescaped `&` with a fix hint. |
+| `alight/real-export-5.0.273.xml` | Real Alight Motion export: one `content://` image reported as stored on the exporting phone (resolved if a file with its recorded name is imported alongside); rectangle 540 × 960 and image 772.5 px drawn. |
+| `alight/tool-made-data-uri.xml` | Tool-made scene with a `data:` image: decoded once; `filename` is not treated as a path. (On a device the image did not show in Alight Motion.) |
+| `alight-probe/` | On-device probe: four image-reference methods (A–D), text, contour ellipse, gradient. |

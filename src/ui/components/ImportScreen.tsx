@@ -7,6 +7,7 @@ export const SAMPLES: Array<{ file: string; title: string; detail: string }> = [
   { file: 'site-report.docx', title: 'Word document', detail: 'Images reached through OOXML relationships' },
   { file: 'lighthouse.fb2', title: 'FB2 e-book', detail: 'Base64 <binary> images, one missing' },
   { file: 'catalog.zip', title: 'Unknown schema', detail: 'Images detected from values only, never from element names' },
+  { file: 'real-export-5.0.273.xml', title: 'Alight Motion export', detail: 'A real project XML from Alight Motion 5.0.273 (image stored on the phone)' },
   { file: 'unclosed-tag.xml', title: 'Broken XML', detail: 'Shows a located parse error' },
 ];
 

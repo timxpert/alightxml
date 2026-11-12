@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?><!--
+Created by Alight Motion (http://alightmotion.com)
+Exported: 2026-11-12 08:29 PM
+5.0.273.1028425 (1028425)
+2d5c0f8 (May 19, 2026 10:16:19 PM)
+-->
+<scene title="New Project 110" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="10032" fps="30" modifiedTime="1794511771302" amver="1028425" ffver="106" am="com.alightcreative.motion/5.0.273.1028425" amplatform="android" retime="freeze" retimeAdaptFPS="false">
+  <media uri="content://media/external/images/media/143949" filename="picture-ok.png" title="picture-ok.png" type="image/png" size="11668" orientation="0" infoUpdated="1794510381592" width="600" height="600" />
+  <shape id="987142627" label="Rectangle 1" startTime="0" endTime="10032" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="540.000000,960.000000,0.000000" />
+      <scale value="5.400000,9.600000" />
+    </transform>
+    <fillColor value="#ffff5a1f" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <shape id="987142626" label="picture-ok.png" startTime="0" endTime="10032" fillType="media" fillImage="content://media/external/images/media/143949" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="540.000000,960.000000,0.000000" />
+      <scale value="1.430556,1.430556" />
+    </transform>
+    <property name="size" type="vec2" value="540.000000,540.000000" />
+  </shape>
+</scene>

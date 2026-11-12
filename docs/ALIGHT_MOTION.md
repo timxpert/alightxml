@@ -8,20 +8,34 @@
 
 Every rule the writer applies is listed in `src/core/alight/rules.ts` with its provenance, and appears in each compatibility report.
 
+## Evidence from a real export (Alight Motion 5.0.273, 2026-11-12)
+
+`samples/alight/real-export-5.0.273.xml` (one rectangle, one image) established:
+
+- Rectangles: `<shape s=".rect" mediaFillMode="fill">` with `<property name="size" type="vec2" value="100,100"/>` after the fill, sized by `scale` (5.4, 9.6 → 540 × 960).
+- Images: `fillType="media"`, `fillImage` = the media uri, `size` property = the image's base size, uniform `scale`.
+- `<media uri filename title type size orientation="0" infoUpdated width height/>`, with **no `sig`**.
+- Images are referenced by the phone's gallery address (`content://media/external/images/media/…`), so the image is not in the XML and only exists on the phone that exported it.
+- Layer ids are not ordered; file order is the stacking order.
+
+A tool-made file that embedded its image as a `data:` URI imported without the image showing, so `data:` media is not used.
+
+**Open question:** which image reference loads in an imported XML on another phone. Run the probe (`samples/alight-probe/`, also `public/xmlcanvas-alight-probe.zip`).
+
 ## Mapping
 
 | Source | Alight Motion | Provenance |
 |---|---|---|
 | Canvas size, duration, fps, background | `<scene width height exportWidth exportHeight totalTime fps bgcolor …>` | observed |
-| Axis-aligned rectangle | `<shape s=".rect">`, scale = size/100, location = centre | observed + documented |
+| Axis-aligned rectangle | `<shape s=".rect">` + size property 100,100, scale = size/100, location = centre | observed (real export) |
 | Circle, ellipse, rounded/skewed rect, polygon, path | `<shape>` + `<parameter><contour d="M/L/C/Z…"/></parameter>` | documented; coordinate space **assumed** |
-| Image | `.rect` with `fillType="media" fillImage="am-internal:///SIG.ext" mediaFillMode="fill"`, sized to the image's aspect ratio | documented; fill-mode meaning **assumed** |
+| Image | `.rect` with `fillType="media" fillImage="am-internal:///SIG.ext" mediaFillMode="fill"`, size property = drawn size | structure observed; `am-internal` reference **assumed** (see probe) |
 | Text | `<text size font="googlefonts?name=…&weight=…" wrapWidth align>` + `<content>` | documented; anchoring **assumed** |
 | Group | `<embedScene fillType="intrinsic">` with a full-canvas nested `<scene>` | observed |
 | Solid / linear / radial fill | `<fillColor>` / `<gradient type startColor endColor start end>` (two colours) | observed; start/end space **assumed** |
 | Position, scale, rotation, opacity | `<transform>` children | observed; rotation sign **assumed** |
 | Animation | `<kf t v>` with `t` normalised to the layer duration; rotations sampled every ≤15° | observed (conflicts with the reference, which says seconds) |
-| Media | `<media uri filename title type size sig width height>`; file packaged as `SIG.ext`; SIG = first 32 hex characters of SHA-256 | documented; sig algorithm **assumed** |
+| Media | `<media uri filename title type size orientation infoUpdated width height>`; file packaged as `SIG.ext` | attributes observed; packaging **assumed** |
 
 ## Package
 

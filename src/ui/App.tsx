@@ -154,8 +154,9 @@ export function App() {
 
   // ---- Alight Motion conversion (recomputed when inputs settle) ----
   const settled = assets.every((a) => a.display !== 'pending' && a.remoteState !== 'loading');
+  const convertible = !!result?.design && result.format?.id !== 'alight';
   const conv = useMemo(() => {
-    if (!result?.design || !settled) return undefined;
+    if (!result?.design || !convertible || !settled) return undefined;
     const map = new Map<string, ResolvedAsset>(assets.map((a) => [a.key, a]));
     return convertToAlightMotion(result.design, map, {
       title: amOptions.title || 'Untitled',
@@ -164,7 +165,7 @@ export function App() {
       background: amOptions.transparent ? null : parseColor(amOptions.background),
       sourceName: activeXml ?? 'pasted.xml',
     });
-  }, [result, assets, settled, amOptions, activeXml]);
+  }, [result, assets, settled, amOptions, activeXml, convertible]);
   useEffect(() => {
     setValidation(undefined);
     if (!conv) return;
@@ -238,7 +239,7 @@ export function App() {
               </div>
             )}
           </div>
-          <Button variant="primary" icon="export" disabled={!result?.design} onClick={() => setView('alight')} title={result?.design ? 'Convert to Alight Motion' : 'Export needs an SVG design'}>Export</Button>
+          <Button variant="primary" icon="export" disabled={!convertible} onClick={() => setView('alight')} title={convertible ? 'Convert to Alight Motion' : result?.format?.id === 'alight' ? 'This file is already an Alight Motion project' : 'Export needs an SVG design'}>Export</Button>
           <IconButton icon={theme === 'dark' ? 'sun' : 'moon'} label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))} />
           {manifest && <IconButton icon="close" label="Close project" onClick={closeProject} />}
         </div>
@@ -281,7 +282,7 @@ export function App() {
               ) : view === 'source' ? (
                 <SourceView text={result.sourceText} folds={result.folds} error={result.error} warnings={result.parseWarnings} gotoLine={gotoLine} />
               ) : (
-                <AlightView available={!!result.design} unavailableReason={result.error ? 'Fix the XML error first.' : `Conversion reads layout from SVG designs. This file is ${result.format?.name ?? 'not SVG'}, which XML Canvas interprets for its images only, so there is no layout to convert.`}
+                <AlightView available={convertible} unavailableReason={result.error ? 'Fix the XML error first.' : result.format?.id === 'alight' ? 'This file is already Alight Motion scene XML. The Canvas tab shows how XML Canvas reads it, and the Assets tab shows whether its images can be found.' : `Conversion reads layout from SVG designs. This file is ${result.format?.name ?? 'not SVG'}, which XML Canvas interprets for its images only, so there is no layout to convert.`}
                   conv={conv} validation={validation} report={report} options={amOptions} onOptions={setAmOptions}
                   original={{ name: activeXml ?? 'pasted.xml', text: pasted ?? result.sourceText }} onSelectNode={(id) => { selectNode(id); setView('canvas'); }} />
               )}

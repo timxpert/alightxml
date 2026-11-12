@@ -6,6 +6,7 @@ import { resolveReferences } from '../assets/resolver';
 import type { ResolvedAsset } from '../assets/types';
 import type { DesignScene } from '../design/model';
 import { interpretSvg } from '../design/svgInterpreter';
+import { interpretAlight } from '../design/alightInterpreter';
 import { decodeXmlBytes } from '../xml/decode';
 import { parseXml } from '../xml/parser';
 import { walkElements } from '../xml/query';
@@ -141,11 +142,11 @@ export async function analyze(input: AnalysisInput, progress: ProgressFn = () =>
   base.assets = await resolveReferences([...extracted.references, ...swept], { fs, xmlPath: input.xmlPath }, (done, total) => progress('Resolving images', done, total));
   timings.resolve = performance.now() - t;
 
-  if (match.adapter.id === 'svg') {
+  if (match.adapter.id === 'svg' || match.adapter.id === 'alight') {
     progress('Reconstructing design');
     t = performance.now();
     try {
-      base.design = interpretSvg(doc);
+      base.design = match.adapter.id === 'svg' ? interpretSvg(doc) : interpretAlight(doc);
     } catch (e) {
       base.designError = `The design could not be reconstructed: ${(e as Error).message}`;
     }

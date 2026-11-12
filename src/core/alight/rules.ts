@@ -28,6 +28,7 @@ export const TARGET = {
 
 const DOCS = 'Community reference generated from the decompiled Alight Motion APK (kuchingneko28/alight-motion-docs, docs/authoring.md).';
 const EXPORTS = 'Public project XML exported by Alight Motion (scene headers and layer snippets from app versions 4.0.3–5.0.272).';
+const REAL = 'A complete project XML exported by Alight Motion 5.0.273 on an Android phone (samples/alight/real-export-5.0.273.xml)';
 
 export const RULES: Record<string, MappingRule> = {
   'scene-root': {
@@ -45,9 +46,9 @@ export const RULES: Record<string, MappingRule> = {
     description: 'Colours are written as lower-case #aarrggbb (alpha first).', evidence: EXPORTS,
   },
   ids: {
-    id: 'ids', title: 'Layer ids and timing', provenance: 'documented',
-    description: 'Every layer has a unique positive integer id, ascending in document order (unique across nested scenes too), startTime="0" and endTime equal to the scene totalTime.',
-    evidence: DOCS,
+    id: 'ids', title: 'Layer ids and timing', provenance: 'observed',
+    description: 'Every layer has a unique positive integer id, startTime="0" and endTime equal to the scene totalTime. Ids are not ordered: file order is the stacking order (first = back).',
+    evidence: `${REAL} shows ids 987142627 then 987142626, back to front.`,
   },
   transform: {
     id: 'transform', title: 'Transform block', provenance: 'observed',
@@ -61,8 +62,13 @@ export const RULES: Record<string, MappingRule> = {
   },
   rect: {
     id: 'rect', title: 'Rectangle → .rect shape', provenance: 'observed',
-    description: 'Axis-aligned rectangles become <shape s=".rect"> layers. The template is 100 × 100 units, so scale = size / 100 and location = rectangle centre.',
-    evidence: `s=".rect" with location/scale: ${EXPORTS} 100-unit template: ${DOCS}`,
+    description: 'Axis-aligned rectangles become <shape s=".rect" mediaFillMode="fill"> layers with <property name="size" value="100,100"/>, scale = size / 100 and location = rectangle centre.',
+    evidence: `${REAL}: a 540 × 960 rectangle is written as size 100,100 with scale 5.4,9.6.`,
+  },
+  'size-property': {
+    id: 'size-property', title: 'Size property', provenance: 'observed',
+    description: '.rect layers carry <property name="size" type="vec2" value="w,h"/> after their fill. Image layers put their real size there and keep scale 1.',
+    evidence: `${REAL}: the image layer has size 540,540 (with a uniform scale); the rectangle has size 100,100.`,
   },
   'path-contour': {
     id: 'path-contour', title: 'Vectors → imported shape contour', provenance: 'documented',
@@ -85,19 +91,24 @@ export const RULES: Record<string, MappingRule> = {
     evidence: 'Exported values fall in this range, but the meaning is not confirmed.',
   },
   media: {
-    id: 'media', title: 'Media declarations and packaging', provenance: 'documented',
-    description: 'Each image is declared once as <media uri="am-internal:///SIG.ext" filename="SIG.ext" title type size sig width height/> before the layers, and the file is packaged as SIG.ext.',
-    evidence: DOCS,
+    id: 'media', title: 'Media declarations', provenance: 'observed',
+    description: 'Each image is declared once, before the layers, as <media uri filename title type size orientation="0" infoUpdated width height/>, and image layers point to the same uri in fillImage.',
+    evidence: REAL,
+  },
+  'media-uri': {
+    id: 'media-uri', title: 'Image reference (uri)', provenance: 'assumed',
+    description: 'Images are referenced as am-internal:///SIG.ext and packaged under that name. A real project export instead uses the phone\'s own content:// address, which only exists on that phone, so images in imported XML are expected to need replacing in the app. Embedding the image as a data: URI was tested on a device and the image did NOT show. Use the probe project to find a reference that loads.',
+    evidence: `${REAL} (content://). am-internal for exported presets: ${DOCS} data: URI: user test on 2026-11-12, image not shown.`,
   },
   'media-sig': {
-    id: 'media-sig', title: 'Media signature', provenance: 'assumed',
-    description: 'SIG is the first 32 hex characters of the file\'s SHA-256. The reference calls sig a content signature but does not specify the algorithm.',
+    id: 'media-sig', title: 'Packaged file name', provenance: 'assumed',
+    description: 'Packaged image files are named with the first 32 hex characters of their SHA-256, as the reference describes for packaged projects.',
     evidence: DOCS,
   },
   image: {
-    id: 'image', title: 'Image → media-filled .rect', provenance: 'documented',
-    description: 'Images become .rect shape layers with fillType="media", fillImage pointing to the media uri and mediaFillMode="fill". The layer is sized to the image\'s drawn area, so its aspect ratio is preserved.',
-    evidence: `Images as media fills: ${DOCS} mediaFillMode="fill" value: ${EXPORTS}`,
+    id: 'image', title: 'Image → media-filled .rect', provenance: 'observed',
+    description: 'Images become .rect shape layers with fillType="media", fillImage pointing to the media uri and mediaFillMode="fill". The size property holds the image\'s drawn size, so its aspect ratio is preserved.',
+    evidence: REAL,
   },
   'image-fill-mode': {
     id: 'image-fill-mode', title: 'Media fill mode meaning', provenance: 'assumed',

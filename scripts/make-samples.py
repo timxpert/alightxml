@@ -331,7 +331,7 @@ def security_and_errors():
   <image href="https://cdn.example.com/img?id=7&size=large" width="100" height="100"/>
 </svg>
 ''')
-    for name in ['security/xxe.xml', 'security/active-content.svg', 'broken/unclosed-tag.xml']:
+    for name in ['security/xxe.xml', 'security/active-content.svg', 'broken/unclosed-tag.xml', 'alight/real-export-5.0.273.xml']:
         shutil.copy(os.path.join(S, name), os.path.join(PUB, os.path.basename(name)))
 
 

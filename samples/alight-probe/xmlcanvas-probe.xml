@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?><!--
+XML Canvas compatibility probe. Each lettered layer references its image differently.
+-->
+<scene title="XML Canvas probe" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#ff16161c" totalTime="10000" fps="30" modifiedTime="1794512080399" amver="1028425" ffver="106" am="com.alightcreative.motion/5.0.273.1028425" amplatform="android" retime="freeze" retimeAdaptFPS="false">
+  <media uri="am-internal:///7437fad231526949271c377c7e115de1.png" filename="7437fad231526949271c377c7e115de1.png" title="7437fad231526949271c377c7e115de1.png" type="image/png" size="8876" orientation="0" infoUpdated="1794512080399" width="600" height="600" />
+  <media uri="file:///storage/emulated/0/Download/xmlcanvas-probe-b.png" filename="xmlcanvas-probe-b.png" title="xmlcanvas-probe-b.png" type="image/png" size="9010" orientation="0" infoUpdated="1794512080399" width="600" height="600" />
+  <media uri="content://media/external/images/media/143949" filename="picture-ok.png" title="picture-ok.png" type="image/png" size="11668" orientation="0" infoUpdated="1794512080399" width="600" height="600" />
+  <media uri="xmlcanvas-probe-d.png" filename="xmlcanvas-probe-d.png" title="xmlcanvas-probe-d.png" type="image/png" size="8435" orientation="0" infoUpdated="1794512080399" width="600" height="600" />
+  <shape id="700000001" label="Panel" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="540.000000,960.000000,0.000000" />
+      <scale value="10.000000,18.400000" />
+    </transform>
+    <fillColor value="#ff23232b" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <text id="700000002" label="Title" startTime="0" endTime="10000" fillType="color" size="64" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="900" align="center">
+    <transform>
+      <location value="540.000000,190.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>XML Canvas probe</content>
+  </text>
+  <shape id="700000003" label="A image" startTime="0" endTime="10000" fillType="media" fillImage="am-internal:///7437fad231526949271c377c7e115de1.png" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="290.000000,560.000000,0.000000" />
+    </transform>
+    <property name="size" type="vec2" value="420.000000,420.000000" />
+  </shape>
+  <text id="700000004" label="A label" startTime="0" endTime="10000" fillType="color" size="34" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="900" align="center">
+    <transform>
+      <location value="290.000000,820.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>A · am-internal</content>
+  </text>
+  <shape id="700000005" label="B image" startTime="0" endTime="10000" fillType="media" fillImage="file:///storage/emulated/0/Download/xmlcanvas-probe-b.png" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="790.000000,560.000000,0.000000" />
+    </transform>
+    <property name="size" type="vec2" value="420.000000,420.000000" />
+  </shape>
+  <text id="700000006" label="B label" startTime="0" endTime="10000" fillType="color" size="34" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="900" align="center">
+    <transform>
+      <location value="790.000000,820.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>B · Download path</content>
+  </text>
+  <shape id="700000007" label="C image" startTime="0" endTime="10000" fillType="media" fillImage="content://media/external/images/media/143949" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="290.000000,1130.000000,0.000000" />
+    </transform>
+    <property name="size" type="vec2" value="420.000000,420.000000" />
+  </shape>
+  <text id="700000008" label="C label" startTime="0" endTime="10000" fillType="color" size="34" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="900" align="center">
+    <transform>
+      <location value="290.000000,1390.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>C · your picture-ok</content>
+  </text>
+  <shape id="700000009" label="D image" startTime="0" endTime="10000" fillType="media" fillImage="xmlcanvas-probe-d.png" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="790.000000,1130.000000,0.000000" />
+    </transform>
+    <property name="size" type="vec2" value="420.000000,420.000000" />
+  </shape>
+  <text id="700000010" label="D label" startTime="0" endTime="10000" fillType="color" size="34" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="900" align="center">
+    <transform>
+      <location value="790.000000,1390.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>D · file name only</content>
+  </text>
+  <shape id="700000011" label="E ellipse (contour)" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill">
+    <transform>
+      <location value="290.000000,1640.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffcc66" />
+    <parameter>
+      <contour d="M150,0 C150,55.228 82.843,100 0,100 C-82.843,100 -150,55.228 -150,0 C-150,-55.228 -82.843,-100 0,-100 C82.843,-100 150,-55.228 150,0 Z" />
+    </parameter>
+  </shape>
+  <shape id="700000012" label="F gradient" startTime="0" endTime="10000" fillType="gradient" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="790.000000,1640.000000,0.000000" />
+      <scale value="4.000000,2.000000" />
+    </transform>
+    <fillColor value="#ff8b6cff" />
+    <gradient type="linear" startColor="#ff8b6cff" endColor="#ffff5a1f" start="0.000000,0.000000" end="1.000000,0.000000" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <text id="700000013" label="E label" startTime="0" endTime="10000" fillType="color" size="34" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="900" align="center">
+    <transform>
+      <location value="290.000000,1800.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>E · ellipse</content>
+  </text>
+  <text id="700000014" label="F label" startTime="0" endTime="10000" fillType="color" size="34" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="900" align="center">
+    <transform>
+      <location value="790.000000,1800.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>F · gradient</content>
+  </text>
+</scene>

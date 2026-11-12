@@ -219,8 +219,8 @@ async function resolveOne(ref: AssetReference, ctx: ResolveContext): Promise<Par
       return resolvePath(ref, ctx);
     case 'project-path': {
       const f = ctx.fs.get(ref.value) ?? (ctx.fs.getCaseInsensitive(ref.value).length === 1 ? ctx.fs.getCaseInsensitive(ref.value)[0] : undefined);
-      if (f) return fromFile(f, 'Resolved through the package relationship file');
-      return { status: 'missing', location: ref.value, warnings: [], reason: `The package points to "${ref.value}", but that file is not in the imported files.` };
+      if (f) return fromFile(f, ref.resolveMethod ?? 'Resolved through the package relationship file', ref.resolveNote ? [ref.resolveNote] : []);
+      return { status: 'missing', location: ref.value, warnings: [], reason: `The XML points to "${ref.value}", but that file is not in the imported files.` };
     }
     case 'android-resource':
       return resolveAndroid(ref, ctx);
@@ -230,7 +230,7 @@ async function resolveOne(ref: AssetReference, ctx: ResolveContext): Promise<Par
 function assetName(ref: AssetReference, p: Partial, n: number): string {
   if (p.filePath) return basename(p.filePath);
   const ext = p.format ? EXT_FOR_FORMAT[p.format] : 'bin';
-  if (ref.kind === 'data-uri') return `embedded-${n}.${ext}`;
+  if (ref.kind === 'data-uri') return ref.label && ref.label !== 'Embedded data URI' ? ref.label : `embedded-${n}.${ext}`;
   if (ref.kind === 'base64') return /\.\w{2,4}$/.test(ref.label) ? ref.label : `${ref.label || `embedded-${n}`}.${ext}`;
   if (ref.kind === 'url') return basename(p.url ?? ref.value) || ref.label;
   return ref.label || basename(ref.value) || `asset-${n}`;

@@ -83,6 +83,27 @@ describe('Alight Motion writer', () => {
     expect(tval(layer, 'location')).toBe('35.000000,35.000000,0.000000');
     expect(tval(layer, 'scale')).toBe('0.500000,0.300000');
     expect(getAttr(childElements(layer).find((c) => c.name === 'fillColor')!, 'value')).toBe('#ff336699');
+    const size = childElements(layer).find((c) => c.name === 'property')!;
+    expect([getAttr(size, 'name'), getAttr(size, 'type'), getAttr(size, 'value')]).toEqual(['size', 'vec2', '100.000000,100.000000']);
+  });
+
+  it('matches the structure of a real Alight Motion 5.0.273 export', async () => {
+    const { readFileSync } = await import('node:fs');
+    const real = parseXml(readFileSync(new URL('../samples/alight/real-export-5.0.273.xml', import.meta.url), 'utf8'));
+    const shape = (doc: ReturnType<typeof parseXml>, fill: string) => [...walkElements(doc.root)].find((e) => e.name === 'shape' && getAttr(e, 'fillType') === fill)!;
+    const sig = (el: ReturnType<typeof shape>) => ({
+      attrs: el.attrs.map((a) => a.name).filter((n) => n !== 'fillImage'),
+      children: childElements(el).map((c) => (c.name === 'property' ? `property:${getAttr(c, 'name')}:${getAttr(c, 'type')}` : c.name)),
+    });
+    const ours = am(svg('<rect x="0" y="0" width="540" height="960" fill="#ff5a1f"/>')).doc;
+    expect(sig(shape(ours, 'color'))).toEqual(sig(shape(real, 'color')));
+    const realMedia = childElements(real.root).find((c) => c.name === 'media')!;
+    const pngBytes = new Uint8Array(readFileSync(new URL('../samples/svg-poster/assets/logo.png', import.meta.url)));
+    const asset = { id: 'a', key: 'path:logo.png', name: 'logo.png', kind: 'path', status: 'resolved', location: 'logo.png', format: 'png', mime: 'image/png', width: 128, height: 128, byteLength: pngBytes.length, sha256: 'ab'.repeat(32), bytes: pngBytes.buffer, warnings: [], usages: [], adapter: 'svg', confidence: 'schema', evidence: '', rawReference: 'logo.png' } as ResolvedAsset;
+    const withImg = am(svg('<image href="logo.png" width="128" height="128"/>'), new Map([['path:logo.png', asset]])).doc;
+    const ourMedia = childElements(withImg.root).find((c) => c.name === 'media')!;
+    expect(ourMedia.attrs.map((a) => a.name)).toEqual(realMedia.attrs.map((a) => a.name));
+    expect(sig(shape(withImg, 'media'))).toEqual({ attrs: sig(shape(real, 'media')).attrs, children: ['transform', 'property:size:vec2'] });
   });
   it('writes the scene root like an exported project', () => {
     const { doc } = am(svg('<rect width="5" height="5"/>'), undefined, { background: { r: 0, g: 0, b: 0, a: 1 } });
@@ -174,8 +195,10 @@ describe('poster → Alight Motion end to end', async () => {
     const hero = conv.layers.find((l) => l.label === 'Hero photo')!;
     const doc = parseXml(conv.xml);
     const el = [...walkElements(doc.root)].find((e) => getAttr(e, 'id') === String(hero.id))!;
-    const [sx, sy] = tval(el, 'scale')!.split(',').map(Number);
-    expect(sx / sy).toBeCloseTo(640 / 400, 3);
+    const size = childElements(el).find((c) => c.name === 'property' && getAttr(c, 'name') === 'size')!;
+    const [sw, sh] = getAttr(size, 'value')!.split(',').map(Number);
+    expect(sw / sh).toBeCloseTo(640 / 400, 3);
+    expect(tval(el, 'scale')).toBeUndefined();
   });
   it('reports dropped elements: missing/remote images and the stroke-only divider', () => {
     const names = conv.dropped.map((d) => d.name);

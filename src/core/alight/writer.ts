@@ -240,6 +240,7 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
     };
   };
 
+  const sizeProp = (w: number, h: number, d: number) => `${indent(d)}<property name="size" type="vec2" value="${f6(w)},${f6(h)}" />`;
   const drop = (node: DesignNode, reason: string) => dropped.push({ nodeId: node.id, name: node.name, source: node.source, reason });
 
   const emitNode = (node: DesignNode, d: number, depth: number): string | null => {
@@ -297,13 +298,15 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
         x += (w - dw) * ax; y += (h - dh) * ay; w = dw; h = dh;
       } else if (par[0] === 'none') notes.push('preserveAspectRatio="none" stretches the image; the layer keeps the stretched size.');
       const dec = decompose(node.matrix);
-      const frame: LayerFrame = { center: apply(node.matrix, x + w / 2, y + h / 2), rotation: dec.rotation, scale: [(w * dec.scaleX) / 100, (h * Math.abs(dec.scaleY)) / 100] };
+      const frame: LayerFrame = { center: apply(node.matrix, x + w / 2, y + h / 2), rotation: dec.rotation, scale: [1, 1] };
+      const sizeW = w * dec.scaleX;
+      const sizeH = h * Math.abs(dec.scaleY);
       if (dec.scaleY < 0) notes.push('The image is mirrored in the source; mirroring was dropped.');
       const id = nextId++;
       const t = transformXml(node, frame, node.matrix, d + 1, notes);
-      layers.push({ id, tag: 'shape', label: node.name, layerType: 'Image', nodeId: node.id, source: node.source, rules: ['image', 'image-fill-mode', 'rect', 'media', 'media-sig'], notes, animated: t.animated, depth });
-      rulesUsed.add('image').add('image-fill-mode').add('rect');
-      return [`${indent(d)}<shape ${common(id, node.name)} fillType="media" fillImage="${m.uri}" mediaFillMode="fill" s=".rect">`, t.xml, `${indent(d)}</shape>`].join('\n');
+      layers.push({ id, tag: 'shape', label: node.name, layerType: 'Image', nodeId: node.id, source: node.source, rules: ['image', 'image-fill-mode', 'size-property', 'media', 'media-uri', 'media-sig'], notes, animated: t.animated, depth });
+      rulesUsed.add('image').add('image-fill-mode').add('size-property').add('media-uri');
+      return [`${indent(d)}<shape ${common(id, node.name)} fillType="media" fillImage="${m.uri}" mediaFillMode="fill" s=".rect">`, t.xml, sizeProp(sizeW, sizeH, d + 1), `${indent(d)}</shape>`].join('\n');
     }
 
     if (node.kind === 'text') {
@@ -352,9 +355,9 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
       const frame: LayerFrame = { center: apply(node.matrix, node.x + node.width / 2, node.y + node.height / 2), rotation: dec.rotation, scale: [(node.width * dec.scaleX) / 100, (node.height * Math.abs(dec.scaleY)) / 100] };
       const id = nextId++;
       const t = transformXml(node, frame, node.matrix, d + 1, notes);
-      layers.push({ id, tag: 'shape', label: node.name, layerType: 'Rectangle', nodeId: node.id, source: node.source, rules: ['rect', ...(fx.fillType === 'gradient' ? ['gradient', 'gradient-coordinates'] : [])], notes, animated: t.animated, depth });
-      rulesUsed.add('rect');
-      return [`${indent(d)}<shape ${common(id, node.name)} fillType="${fx.fillType}" s=".rect">`, t.xml, fx.xml, `${indent(d)}</shape>`].join('\n');
+      layers.push({ id, tag: 'shape', label: node.name, layerType: 'Rectangle', nodeId: node.id, source: node.source, rules: ['rect', 'size-property', ...(fx.fillType === 'gradient' ? ['gradient', 'gradient-coordinates'] : [])], notes, animated: t.animated, depth });
+      rulesUsed.add('rect').add('size-property');
+      return [`${indent(d)}<shape ${common(id, node.name)} fillType="${fx.fillType}" mediaFillMode="fill" s=".rect">`, t.xml, fx.xml, sizeProp(100, 100, d + 1), `${indent(d)}</shape>`].join('\n');
     }
 
     let local: Seg[] | null;
@@ -377,7 +380,7 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
     layers.push({ id, tag: 'shape', label: node.name, layerType: 'Vector shape', nodeId: node.id, source: node.source, rules: ['path-contour', 'path-coordinates', ...(fx.fillType === 'gradient' ? ['gradient', 'gradient-coordinates'] : [])], notes, animated: t.animated, depth });
     rulesUsed.add('path-contour').add('path-coordinates');
     return [
-      `${indent(d)}<shape ${common(id, node.name)} fillType="${fx.fillType}">`,
+      `${indent(d)}<shape ${common(id, node.name)} fillType="${fx.fillType}" mediaFillMode="fill">`,
       t.xml,
       fx.xml,
       `${indent(d + 1)}<parameter>`,
@@ -387,9 +390,10 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
     ].join('\n');
   };
 
+  const infoUpdated = Date.now();
   const body = scene.nodes.map((n) => emitNode(n, 1, 0)).filter((x): x is string => !!x);
   const mediaXml = [...media.values()].map(
-    (m) => `  <media uri="${m.uri}" filename="${m.filename}" title="${escAttr(m.title)}" type="${m.mime}" size="${m.size}" sig="${m.sig}" width="${m.width}" height="${m.height}"/>`,
+    (m) => `  <media uri="${m.uri}" filename="${m.filename}" title="${escAttr(m.title)}" type="${m.mime}" size="${m.size}" orientation="0" infoUpdated="${infoUpdated}" width="${m.width}" height="${m.height}"/>`,
   );
   const bg = opts.background ? toAARRGGBB(opts.background) : '#00000000';
   const comment = `<!--\nGenerated by XML Canvas from "${opts.sourceName.replace(/--/g, '- -')}".\nTarget: ${TARGET.format}, format ${TARGET.ffver} (as documented by the community reference for app ${TARGET.appVersion}).\nNOT YET VERIFIED by importing into Alight Motion. See compatibility-report.md.\n-->`;

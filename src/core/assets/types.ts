@@ -35,6 +35,10 @@ export interface AssetReference {
   usage: AssetUsage;
   /** Only for kind 'unresolvable'. */
   failure?: { status: AssetStatus; reason: string };
+  /** How the adapter located a project file (shown as "Resolved by"). */
+  resolveMethod?: string;
+  /** Caveat shown with the asset when it resolves (e.g. matched by file name). */
+  resolveNote?: string;
 }
 
 export type AssetStatus = 'resolved' | 'missing' | 'remote' | 'invalid' | 'unsupported';

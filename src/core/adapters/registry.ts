@@ -1,4 +1,5 @@
 import type { XmlDocument } from '../xml/types';
+import { alightAdapter } from './alight';
 import { androidAdapter } from './android';
 import { fb2Adapter } from './fb2';
 import { genericAdapter } from './generic';
@@ -7,7 +8,7 @@ import { svgAdapter } from './svg';
 import type { Detection, FormatAdapter } from './types';
 
 /** Register new formats here. Order does not matter; the highest detection score wins. */
-export const ADAPTERS: FormatAdapter[] = [svgAdapter, fb2Adapter, androidAdapter, ooxmlAdapter, genericAdapter];
+export const ADAPTERS: FormatAdapter[] = [alightAdapter, svgAdapter, fb2Adapter, androidAdapter, ooxmlAdapter, genericAdapter];
 
 export interface AdapterMatch {
   adapter: FormatAdapter;

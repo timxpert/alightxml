@@ -33,7 +33,7 @@ const CHECK_TITLES: Record<CheckId, string> = {
   xml: 'Scene XML is well-formed',
   scene: 'Scene dimensions, duration and frame rate',
   metadata: 'Compatibility metadata (ffver, amver, am, platform)',
-  ids: 'Layer ids are unique positive integers in order',
+  ids: 'Layer ids are unique positive integers',
   timing: 'Layer start/end times within the scene',
   'layer-types': 'Only supported layer types are used',
   media: 'Media references resolve to packaged files',
@@ -100,12 +100,12 @@ export async function validateConversion(conv: AmConversion): Promise<Validation
   const declared = new Map<string, XmlElement>();
   for (const m of childElements(root).filter((c) => c.name === 'media')) {
     const uri = getAttr(m, 'uri') ?? '';
-    const sig = getAttr(m, 'sig') ?? '';
     const filename = getAttr(m, 'filename') ?? '';
+    const sig = filename.includes('.') ? filename.slice(0, filename.lastIndexOf('.')) : filename;
     if (declared.has(uri)) add('error', 'media', `Media "${uri}" is declared twice.`, m);
     declared.set(uri, m);
-    if (!/^[A-Za-z0-9]+$/.test(sig)) add('error', 'media', `Media sig "${sig}" must be alphanumeric.`, m);
-    if (uri !== `am-internal:///${filename}` || !filename.startsWith(sig + '.')) add('error', 'media', `Media uri, filename and sig disagree (${uri}, ${filename}, ${sig}).`, m);
+    if (!/^[A-Za-z0-9]+$/.test(sig)) add('error', 'media', `Media file name "${filename}" must be a signature plus extension.`, m);
+    if (uri !== `am-internal:///${filename}`) add('error', 'media', `Media uri "${uri}" does not point to its packaged file "${filename}".`, m);
     for (const a of ['size', 'width', 'height']) if (!isInt(getAttr(m, a)) || Number(getAttr(m, a)) <= 0) add('error', 'media', `Media ${a} "${getAttr(m, a) ?? ''}" must be a positive integer.`, m);
     if (!/^image\//.test(getAttr(m, 'type') ?? '')) add('error', 'media', `Media type "${getAttr(m, 'type') ?? ''}" is not an image MIME type.`, m);
     const entry = conv.media.find((e) => e.filename === filename);
@@ -118,7 +118,6 @@ export async function validateConversion(conv: AmConversion): Promise<Validation
   }
 
   const ids = new Map<number, XmlElement>();
-  let lastId = 0;
   const used = new Set<string>();
   for (const el of walkElements(root)) {
     if (LAYER_TAGS.has(el.name)) {
@@ -127,9 +126,7 @@ export async function validateConversion(conv: AmConversion): Promise<Validation
       else {
         const id = Number(idRaw);
         if (ids.has(id)) add('error', 'ids', `Layer id ${id} is used twice (lines ${ids.get(id)!.pos.line} and ${el.pos.line}).`, el);
-        if (id <= lastId) add('warning', 'ids', `Layer id ${id} is not in ascending document order.`, el);
         ids.set(id, el);
-        lastId = Math.max(lastId, id);
       }
       const s = getAttr(el, 'startTime');
       const e = getAttr(el, 'endTime');
@@ -145,6 +142,11 @@ export async function validateConversion(conv: AmConversion): Promise<Validation
       const s = getAttr(el, 's');
       const contour = childElements(el).find((c) => c.name === 'parameter');
       if (s !== undefined && s !== '.rect') add('error', 'geometry', `Shape template "${s}" is not one this exporter writes.`, el);
+      for (const p of childElements(el).filter((c) => c.name === 'property')) {
+        const v = (getAttr(p, 'value') ?? '').split(',').map(Number);
+        if (getAttr(p, 'name') === 'size' && (getAttr(p, 'type') !== 'vec2' || v.length !== 2 || v.some((n) => !Number.isFinite(n) || n <= 0))) add('error', 'geometry', `Size property "${getAttr(p, 'value') ?? ''}" must be two positive numbers (type vec2).`, p);
+      }
+      if (s === '.rect' && !childElements(el).some((c) => c.name === 'property' && getAttr(c, 'name') === 'size')) add('warning', 'geometry', 'Real exports always write <property name="size"> on .rect layers.', el);
       if (s === undefined) {
         const d = contour ? childElements(contour).find((c) => c.name === 'contour') : undefined;
         const dv = d ? getAttr(d, 'd') : undefined;
