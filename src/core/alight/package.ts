@@ -24,7 +24,7 @@ export async function buildPackage(conv: AmConversion, report: { markdown: strin
       '',
       'Contents:',
       `  ${base}.xml  — Alight Motion scene XML`,
-      ...conv.media.map((m) => `  ${m.filename}  — image "${m.title}" (${m.width}×${m.height})`),
+      ...conv.media.map((m) => `  ${m.filename}  — image "${m.title}" (${m.width}×${m.height}) → copy to ${m.uri.replace('file://', '').replace(/\/[^/]+$/, '/')}`),
       '  compatibility-report.md / .json  — what was converted, what was dropped, and why',
       ...(original ? [`  source/${original.name}  — the original, unmodified XML`] : []),
       '',

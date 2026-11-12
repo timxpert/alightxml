@@ -155,7 +155,7 @@ export function NodeInspector({ node, assets, conv, onShowLine }: { node: Design
           <div className="flex flex-wrap gap-1">
             {layer.rules.map((r) => {
               const rule = RULES[r];
-              const tone: Tone = rule?.provenance === 'assumed' ? 'warn' : rule?.provenance === 'observed' ? 'ok' : 'info';
+              const tone: Tone = rule?.provenance === 'verified' ? 'ok' : rule?.provenance === 'failed' ? 'err' : rule?.provenance === 'assumed' ? 'warn' : 'info';
               return <span key={r} title={`${rule?.provenance}: ${rule?.description}`}><Badge tone={tone}>{rule?.title ?? r}</Badge></span>;
             })}
           </div>

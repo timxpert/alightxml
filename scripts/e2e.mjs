@@ -118,9 +118,10 @@ try {
   const names = Object.keys(zip.files);
   const xmlName = names.find((n) => n.endsWith('.xml') && !n.startsWith('source/'));
   const xml = await zip.file(xmlName).async('string');
-  const mediaFiles = names.filter((n) => /^[0-9a-f]{32}\.\w+$/.test(n));
+  const mediaFiles = names.filter((n) => /^[A-Za-z0-9_-]+-[0-9a-f]{8}\.\w+$/.test(n));
   check('Package contains scene XML, media, report and source', !!xmlName && mediaFiles.length === 5 && names.includes('compatibility-report.md') && names.includes('source/poster.svg'), names.join(', '));
-  check('Every fillImage in the package has its file', [...xml.matchAll(/fillImage="am-internal:\/\/\/([^"]+)"/g)].every((m) => names.includes(m[1])));
+  const fills = [...xml.matchAll(/fillImage="file:\/\/\/storage\/emulated\/0\/Download\/([^"]+)"/g)];
+  check('Every fillImage points to a packaged file in the Download folder', fills.length === 5 && fills.every((m) => names.includes(m[1])), fills.map((m) => m[1]).join(', '));
   await page.getByRole('button', { name: /Generated scene XML/ }).click();
   check('Generated XML preview is shown', (await page.getByTestId('am-xml').innerText()).includes('<scene title="poster"'));
 

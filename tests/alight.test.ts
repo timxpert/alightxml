@@ -81,7 +81,7 @@ describe('Alight Motion writer', () => {
     expect(getAttr(layer, 's')).toBe('.rect');
     expect(getAttr(layer, 'fillType')).toBe('color');
     expect(tval(layer, 'location')).toBe('35.000000,35.000000,0.000000');
-    expect(tval(layer, 'scale')).toBe('0.500000,0.300000');
+    expect(tval(layer, 'scale')).toBe('0.250000,0.150000'); // drawn size = 2 × 100 × scale (verified on device)
     expect(getAttr(childElements(layer).find((c) => c.name === 'fillColor')!, 'value')).toBe('#ff336699');
     const size = childElements(layer).find((c) => c.name === 'property')!;
     expect([getAttr(size, 'name'), getAttr(size, 'type'), getAttr(size, 'value')]).toEqual(['size', 'vec2', '100.000000,100.000000']);
@@ -95,8 +95,10 @@ describe('Alight Motion writer', () => {
       attrs: el.attrs.map((a) => a.name).filter((n) => n !== 'fillImage'),
       children: childElements(el).map((c) => (c.name === 'property' ? `property:${getAttr(c, 'name')}:${getAttr(c, 'type')}` : c.name)),
     });
-    const ours = am(svg('<rect x="0" y="0" width="540" height="960" fill="#ff5a1f"/>')).doc;
+    const ours = am(svg('<rect x="0" y="0" width="1080" height="1920" fill="#ff5a1f"/>', 'width="1080" height="1920"')).doc;
     expect(sig(shape(ours, 'color'))).toEqual(sig(shape(real, 'color')));
+    // The real export's full-screen rectangle and ours carry the same numbers.
+    expect(tval(shape(ours, 'color'), 'scale')).toBe(tval(shape(real, 'color'), 'scale'));
     const realMedia = childElements(real.root).find((c) => c.name === 'media')!;
     const pngBytes = new Uint8Array(readFileSync(new URL('../samples/svg-poster/assets/logo.png', import.meta.url)));
     const asset = { id: 'a', key: 'path:logo.png', name: 'logo.png', kind: 'path', status: 'resolved', location: 'logo.png', format: 'png', mime: 'image/png', width: 128, height: 128, byteLength: pngBytes.length, sha256: 'ab'.repeat(32), bytes: pngBytes.buffer, warnings: [], usages: [], adapter: 'svg', confidence: 'schema', evidence: '', rawReference: 'logo.png' } as ResolvedAsset;
@@ -184,8 +186,8 @@ describe('poster → Alight Motion end to end', async () => {
     expect(media.length).toBe(conv.media.length);
     expect(conv.media.length).toBe(5); // photo, logo, inline badge, Badge.PNG, texture
     for (const m of conv.media) {
-      expect(m.filename).toBe(`${m.sig}.${m.ext}`);
-      expect(m.sha256.startsWith(m.sig)).toBe(true);
+      expect(m.filename).toMatch(new RegExp(`^[A-Za-z0-9_-]+-${m.sha256.slice(0, 8)}\\.${m.ext}$`));
+      expect(m.uri).toBe(`file:///storage/emulated/0/Download/${m.filename}`);
     }
     const fills = [...walkElements(doc.root)].filter((e) => getAttr(e, 'fillType') === 'media').map((e) => getAttr(e, 'fillImage'));
     expect(fills.length).toBe(5);
@@ -198,6 +200,7 @@ describe('poster → Alight Motion end to end', async () => {
     const size = childElements(el).find((c) => c.name === 'property' && getAttr(c, 'name') === 'size')!;
     const [sw, sh] = getAttr(size, 'value')!.split(',').map(Number);
     expect(sw / sh).toBeCloseTo(640 / 400, 3);
+    expect(sw).toBeCloseTo(410, 3); // slice-fitted 820 px wide, size is the half-extent
     expect(tval(el, 'scale')).toBeUndefined();
   });
   it('reports dropped elements: missing/remote images and the stroke-only divider', () => {
@@ -217,9 +220,9 @@ describe('poster → Alight Motion end to end', async () => {
   });
   it('builds a report and a package that say the result is unverified', async () => {
     const report = buildReport(conv, validation, { sourceName: 'poster.svg', sourceFormat: 'SVG', assets: r.assets, designIssues: r.design!.issues });
-    expect(report.json.verifiedInAlightMotion).toBe(false);
-    expect(report.markdown).toContain('NOT been verified');
-    expect(report.markdown).toContain('_assumed_');
+    expect(report.json.verifiedInAlightMotion).toBe('partial');
+    expect(report.markdown).toContain('Partly verified');
+    expect(report.markdown).toContain('_failed_');
     const zipBytes = await buildPackage(conv, report, { name: 'poster.svg', text: r.sourceText });
     const zip = await JSZip.loadAsync(zipBytes);
     const names = Object.keys(zip.files);
@@ -228,6 +231,6 @@ describe('poster → Alight Motion end to end', async () => {
     for (const m of conv.media) expect(names).toContain(m.filename);
   });
   it('every rule used has a provenance', () => {
-    for (const id of conv.rulesUsed) expect(['observed', 'documented', 'assumed']).toContain(RULES[id].provenance);
+    for (const id of conv.rulesUsed) expect(['verified', 'failed', 'observed', 'documented', 'assumed']).toContain(RULES[id].provenance);
   });
 });

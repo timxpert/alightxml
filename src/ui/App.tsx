@@ -49,7 +49,7 @@ export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showPaste, setShowPaste] = useState(false);
   const [dragOver, setDragOver] = useState(false);
-  const [amOptions, setAmOptions] = useState<AmUiOptions>({ title: 'Untitled', fps: 30, seconds: 5, transparent: true, background: '#000000' });
+  const [amOptions, setAmOptions] = useState<AmUiOptions>({ title: 'Untitled', fps: 30, seconds: 5, transparent: true, background: '#000000', phoneFolder: '/storage/emulated/0/Download' });
   const [validation, setValidation] = useState<ValidationResult | undefined>();
   const fileInput = useRef<HTMLInputElement>(null);
   const folderInput = useRef<HTMLInputElement>(null);
@@ -164,6 +164,7 @@ export function App() {
       totalTime: Math.round(amOptions.seconds * 1000),
       background: amOptions.transparent ? null : parseColor(amOptions.background),
       sourceName: activeXml ?? 'pasted.xml',
+      phoneFolder: amOptions.phoneFolder.trim() || undefined,
     });
   }, [result, assets, settled, amOptions, activeXml, convertible]);
   useEffect(() => {

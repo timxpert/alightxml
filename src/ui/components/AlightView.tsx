@@ -15,6 +15,7 @@ export interface AmUiOptions {
   seconds: number;
   transparent: boolean;
   background: string;
+  phoneFolder: string;
 }
 
 interface Props {
@@ -45,7 +46,7 @@ export function AlightView({ available, unavailableReason, conv, validation, rep
   const warnings = validation?.issues.filter((i) => i.level === 'warning') ?? [];
   const blocked = !validation || !validation.ok;
   const base = safeFileName(options.title);
-  const assumedUsed = conv ? conv.rulesUsed.map((r) => RULES[r]).filter((r) => r?.provenance === 'assumed') : [];
+  const assumedUsed = conv ? conv.rulesUsed.map((r) => RULES[r]).filter((r) => r?.provenance === 'assumed' || r?.provenance === 'failed') : [];
   const set = (patch: Partial<AmUiOptions>) => onOptions({ ...options, ...patch });
   const input = 'h-8 w-full rounded-md border border-line bg-raised px-2 text-xs text-fg focus:border-accent focus:outline-none';
 
@@ -54,7 +55,7 @@ export function AlightView({ available, unavailableReason, conv, validation, rep
       <div className="mx-auto flex max-w-5xl flex-col gap-4 p-5">
         <div className="flex items-start gap-3 rounded-lg border border-warn/30 bg-warn/10 px-4 py-3 text-xs leading-relaxed text-fg" role="note">
           <Icon name="alert" size={16} className="mt-0.5 text-warn" />
-          <div><span className="font-semibold">Untested in Alight Motion.</span> {UNTESTED_STATEMENT.replace(/^This project has NOT been verified by importing it into Alight Motion\. /, '')}</div>
+          <div><span className="font-semibold">Partly verified on a phone.</span> {UNTESTED_STATEMENT.replace(/^Partly verified: /, '')}</div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -121,10 +122,10 @@ export function AlightView({ available, unavailableReason, conv, validation, rep
 
             {assumedUsed.length > 0 && (
               <section className="rounded-lg border border-line bg-panel">
-                <div className="border-b border-line px-4 py-3 text-sm font-semibold">Assumptions to verify in Alight Motion</div>
+                <div className="border-b border-line px-4 py-3 text-sm font-semibold">Known gaps</div>
                 <ul className="px-4 py-2">
                   {assumedUsed.map((r) => (
-                    <li key={r.id} className="py-1.5 text-xs"><span className="font-medium text-fg">{r.title}.</span> <span className="text-muted">{r.description}</span></li>
+                    <li key={r.id} className="py-1.5 text-xs"><Badge tone={r.provenance === 'failed' ? 'err' : 'warn'} className="mr-1.5">{r.provenance === 'failed' ? 'Failed on device' : 'Not yet tested'}</Badge><span className="font-medium text-fg">{r.title}.</span> <span className="text-muted">{r.description}</span></li>
                   ))}
                 </ul>
               </section>
@@ -158,6 +159,10 @@ export function AlightView({ available, unavailableReason, conv, validation, rep
                     <input type="color" aria-label="Background colour" disabled={options.transparent} value={toHexRGB(parseColor(options.background) ?? { r: 0, g: 0, b: 0, a: 1 })} onChange={(e) => set({ background: e.target.value })} className="ml-auto h-7 w-10 cursor-pointer rounded border border-line bg-transparent disabled:opacity-40" />
                   </div>
                 </div>
+                <label className="flex flex-col gap-1 text-xs text-muted">Image folder on the phone
+                  <input className={`${input} font-mono`} value={options.phoneFolder} spellCheck={false} onChange={(e) => set({ phoneFolder: e.target.value })} />
+                  <span className="text-[11px] text-subtle">Images are referenced from this folder. Copy the packaged images into it before importing.</span>
+                </label>
                 <div className="text-[11px] text-subtle">Canvas {conv?.width} × {conv?.height} px (from the source).</div>
               </div>
             </section>

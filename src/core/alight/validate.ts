@@ -104,8 +104,8 @@ export async function validateConversion(conv: AmConversion): Promise<Validation
     const sig = filename.includes('.') ? filename.slice(0, filename.lastIndexOf('.')) : filename;
     if (declared.has(uri)) add('error', 'media', `Media "${uri}" is declared twice.`, m);
     declared.set(uri, m);
-    if (!/^[A-Za-z0-9]+$/.test(sig)) add('error', 'media', `Media file name "${filename}" must be a signature plus extension.`, m);
-    if (uri !== `am-internal:///${filename}`) add('error', 'media', `Media uri "${uri}" does not point to its packaged file "${filename}".`, m);
+    if (!/^[A-Za-z0-9_-]+-[0-9a-f]{8}$/.test(sig)) add('error', 'media', `Media file name "${filename}" must be a name, a dash and 8 signature characters.`, m);
+    if (!/^file:\/\/\/[^?#]+$/.test(uri) || !uri.endsWith(`/${filename}`)) add('error', 'media', `Media uri "${uri}" must be a file:// path ending in its packaged file "${filename}".`, m);
     for (const a of ['size', 'width', 'height']) if (!isInt(getAttr(m, a)) || Number(getAttr(m, a)) <= 0) add('error', 'media', `Media ${a} "${getAttr(m, a) ?? ''}" must be a positive integer.`, m);
     if (!/^image\//.test(getAttr(m, 'type') ?? '')) add('error', 'media', `Media type "${getAttr(m, 'type') ?? ''}" is not an image MIME type.`, m);
     const entry = conv.media.find((e) => e.filename === filename);
@@ -113,7 +113,7 @@ export async function validateConversion(conv: AmConversion): Promise<Validation
     else {
       if (entry.bytes.byteLength !== Number(getAttr(m, 'size'))) add('error', 'media', `Packaged file "${filename}" is ${entry.bytes.byteLength} bytes but the declaration says ${getAttr(m, 'size')}.`, m);
       const hash = await sha256Hex(entry.bytes);
-      if (!hash.startsWith(sig)) add('error', 'media', `Packaged file "${filename}" does not match its signature (content changed).`, m);
+      if (!hash.startsWith(sig.slice(-8))) add('error', 'media', `Packaged file "${filename}" does not match its signature (content changed).`, m);
     }
   }
 

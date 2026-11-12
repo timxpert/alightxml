@@ -18,7 +18,15 @@ export interface AmOptions {
   /** Background; null = transparent. */
   background: RGBA | null;
   sourceName: string;
+  /** Folder on the phone the images are copied to (images are referenced as file://<folder>/<name>). */
+  phoneFolder?: string;
 }
+
+export const DEFAULT_PHONE_FOLDER = '/storage/emulated/0/Download';
+/** Verified on device: a .rect layer is drawn 2 × size × scale wide (size is a half-extent). */
+const RECT_UNIT = 200;
+/** Verified on device at 1080 px wide: text size 34 renders with a ~103 px em, i.e. canvas px = size × (short side / 360). */
+const textPxPerUnit = (w: number, h: number) => Math.min(w, h) / 360;
 
 export interface AmLayerRecord {
   id: number;
@@ -122,6 +130,7 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
   const totalTime = Math.max(1, Math.round(opts.totalTime));
   const W = scene.width;
   const H = scene.height;
+  const phoneFolder = (opts.phoneFolder ?? DEFAULT_PHONE_FOLDER).replace(/\/+$/, '') || DEFAULT_PHONE_FOLDER;
   const indent = (d: number) => '  '.repeat(d);
 
   const mediaFor = (asset: ResolvedAsset): AmMediaEntry | null => {
@@ -130,12 +139,14 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
     if (existing) return existing;
     const sig = asset.sha256.slice(0, 32);
     const ext = EXT_FOR_FORMAT[asset.format];
+    const stem = asset.name.replace(/\.[^.]+$/, '').replace(/[^A-Za-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'image';
+    const filename = `${stem}-${sig.slice(0, 8)}.${ext}`;
     const entry: AmMediaEntry = {
-      assetId: asset.id, sig, ext, filename: `${sig}.${ext}`, uri: `am-internal:///${sig}.${ext}`, title: asset.name, mime: asset.mime,
+      assetId: asset.id, sig, ext, filename, uri: `file://${phoneFolder}/${filename}`, title: asset.name, mime: asset.mime,
       size: asset.byteLength ?? asset.bytes.byteLength, width: asset.width ?? 0, height: asset.height ?? 0, sha256: asset.sha256, bytes: new Uint8Array(asset.bytes),
     };
     media.set(asset.id, entry);
-    rulesUsed.add('media').add('media-sig');
+    rulesUsed.add('media').add('media-filename');
     return entry;
   };
 
@@ -299,12 +310,12 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
       } else if (par[0] === 'none') notes.push('preserveAspectRatio="none" stretches the image; the layer keeps the stretched size.');
       const dec = decompose(node.matrix);
       const frame: LayerFrame = { center: apply(node.matrix, x + w / 2, y + h / 2), rotation: dec.rotation, scale: [1, 1] };
-      const sizeW = w * dec.scaleX;
-      const sizeH = h * Math.abs(dec.scaleY);
+      const sizeW = (w * dec.scaleX) / 2;
+      const sizeH = (h * Math.abs(dec.scaleY)) / 2;
       if (dec.scaleY < 0) notes.push('The image is mirrored in the source; mirroring was dropped.');
       const id = nextId++;
       const t = transformXml(node, frame, node.matrix, d + 1, notes);
-      layers.push({ id, tag: 'shape', label: node.name, layerType: 'Image', nodeId: node.id, source: node.source, rules: ['image', 'image-fill-mode', 'size-property', 'media', 'media-uri', 'media-sig'], notes, animated: t.animated, depth });
+      layers.push({ id, tag: 'shape', label: node.name, layerType: 'Image', nodeId: node.id, source: node.source, rules: ['image', 'image-fill-mode', 'size-property', 'media', 'media-uri', 'media-filename'], notes, animated: t.animated, depth });
       rulesUsed.add('image').add('image-fill-mode').add('size-property').add('media-uri');
       return [`${indent(d)}<shape ${common(id, node.name)} fillType="media" fillImage="${m.uri}" mediaFillMode="fill" s=".rect">`, t.xml, sizeProp(sizeW, sizeH, d + 1), `${indent(d)}</shape>`].join('\n');
     }
@@ -314,8 +325,10 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
       const dec = decompose(tn.matrix);
       if (Math.abs(dec.skew) > 1e-6) notes.push('Skew on the text was dropped.');
       const avgScale = Math.sqrt(Math.abs(dec.scaleX * dec.scaleY));
-      const size = tn.fontSize * avgScale;
+      const px = tn.fontSize * avgScale;
+      const size = px / textPxPerUnit(W, H);
       const lineHeight = tn.fontSize * 1.2;
+      rulesUsed.add('text-size');
       const blockMidY = tn.y - tn.fontSize * 0.35 + ((tn.lines.length - 1) * lineHeight) / 2;
       const frame: LayerFrame = { center: apply(tn.matrix, tn.x, blockMidY), rotation: dec.rotation, scale: [1, 1] };
       let fill = tn.fill;
@@ -323,13 +336,13 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
       if (fill.type === 'none') { drop(node, 'Text has no fill (outline-only text is not converted).'); return null; }
       if (tn.fontStyle === 'italic') notes.push('Italic style is not written; choose the italic font variant in Alight Motion.');
       const longest = Math.max(...tn.lines.map((l) => l.length));
-      const wrapWidth = Math.max(512, Math.ceil((longest * size * 0.75 + size) / 8) * 8);
+      const wrapWidth = Math.max(512, Math.ceil((longest * px * 0.62 + px) / 8) * 8);
       const align = tn.anchor === 'middle' ? 'center' : tn.anchor === 'end' ? 'right' : 'left';
       const font = `googlefonts?name=${tn.fontFamily}&weight=${tn.fontWeight}`;
       if (/^(sans-serif|serif|monospace|system-ui|cursive|fantasy)$/i.test(tn.fontFamily)) notes.push(`"${tn.fontFamily}" is a generic CSS family, not a Google Font; Alight Motion will substitute a font.`);
       const id = nextId++;
       const t = transformXml(node, frame, tn.matrix, d + 1, notes);
-      layers.push({ id, tag: 'text', label: node.name, layerType: 'Text', nodeId: node.id, source: node.source, rules: ['text', 'text-position'], notes, animated: t.animated, depth });
+      layers.push({ id, tag: 'text', label: node.name, layerType: 'Text', nodeId: node.id, source: node.source, rules: ['text', 'text-size', 'text-position'], notes, animated: t.animated, depth });
       rulesUsed.add('text').add('text-position');
       return [
         `${indent(d)}<text ${common(id, node.name)} fillType="color" size="${Math.max(1, Math.round(size))}" font="${escAttr(font)}" wrapWidth="${wrapWidth}" align="${align}">`,
@@ -352,7 +365,7 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
       const fx = fillXml(node.fill, { x: node.x, y: node.y, w: node.width, h: node.height }, d + 1, notes);
       if (!fx) return null;
       if (dec.scaleY < 0) notes.push('Mirroring was dropped.');
-      const frame: LayerFrame = { center: apply(node.matrix, node.x + node.width / 2, node.y + node.height / 2), rotation: dec.rotation, scale: [(node.width * dec.scaleX) / 100, (node.height * Math.abs(dec.scaleY)) / 100] };
+      const frame: LayerFrame = { center: apply(node.matrix, node.x + node.width / 2, node.y + node.height / 2), rotation: dec.rotation, scale: [(node.width * dec.scaleX) / RECT_UNIT, (node.height * Math.abs(dec.scaleY)) / RECT_UNIT] };
       const id = nextId++;
       const t = transformXml(node, frame, node.matrix, d + 1, notes);
       layers.push({ id, tag: 'shape', label: node.name, layerType: 'Rectangle', nodeId: node.id, source: node.source, rules: ['rect', 'size-property', ...(fx.fillType === 'gradient' ? ['gradient', 'gradient-coordinates'] : [])], notes, animated: t.animated, depth });
@@ -375,6 +388,7 @@ export function convertToAlightMotion(scene: DesignScene, assets: Map<string, Re
     const rel = transformSegs(canvasSegs, translate(-cx, -cy));
     const fx = fillXml(node.fill, { x: lb.minX, y: lb.minY, w: lb.maxX - lb.minX, h: lb.maxY - lb.minY }, d + 1, notes);
     if (!fx) return null;
+    notes.push('Vector shapes did not display in the on-device test (the layer was created but empty). This layer may appear blank in Alight Motion.');
     const id = nextId++;
     const t = transformXml(node, { center: [cx, cy], rotation: 0, scale: [1, 1] }, node.matrix, d + 1, notes);
     layers.push({ id, tag: 'shape', label: node.name, layerType: 'Vector shape', nodeId: node.id, source: node.source, rules: ['path-contour', 'path-coordinates', ...(fx.fillType === 'gradient' ? ['gradient', 'gradient-coordinates'] : [])], notes, animated: t.animated, depth });

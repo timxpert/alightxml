@@ -85,11 +85,13 @@ export function interpretAlight(doc: XmlDocument): DesignScene {
     return { type: 'none' };
   };
 
+  /** Drawn size before scale: verified on device to be twice the size property (default 100 → 200). */
   const sizeOf = (el: XmlElement): [number, number] => {
     const p = kids(el).find((c) => c.name === 'property' && getAttr(c, 'name') === 'size');
     const v = propValue(p);
-    return v && v.length >= 2 ? [v[0], v[1]] : [100, 100];
+    return v && v.length >= 2 ? [v[0] * 2, v[1] * 2] : [200, 200];
   };
+  const textUnit = Math.min(W, H) / 360;
 
   const visit = (el: XmlElement, parent: Matrix, out: DesignNode[]) => {
     if (getAttr(el, 'hidden') === 'true') { issue('info', `Hidden layer "${getAttr(el, 'label') ?? ''}" is not drawn.`, el); return; }
@@ -136,7 +138,7 @@ export function interpretAlight(doc: XmlDocument): DesignScene {
         const content = kids(el).find((c) => c.name === 'content');
         const text = content ? content.children.map((c) => (c.type === 'text' ? c.value : '')).join('') : '';
         const lines = text.split('\n');
-        const size = Number(getAttr(el, 'size')) || 18;
+        const size = (Number(getAttr(el, 'size')) || 18) * textUnit;
         const font = getAttr(el, 'font') ?? '';
         const fontName = /name=([^&]+)/.exec(font)?.[1] ?? 'sans-serif';
         const weight = Number(/weight=(\d+)/.exec(font)?.[1]) || 400;
@@ -147,7 +149,7 @@ export function interpretAlight(doc: XmlDocument): DesignScene {
           ...base, kind: 'text', x: 0, y: size * 0.35 - ((lines.length - 1) * lineH) / 2, lines, fontFamily: decodeURIComponent(fontName), fontSize: size, fontWeight: weight, fontStyle: 'normal',
           anchor: align === 'center' ? 'middle' : align === 'right' ? 'end' : 'start', fill: fc,
         });
-        issue('info', 'Text is positioned with its anchor at the layer location (an approximation of the app\'s layout).', el, 'textpos');
+        issue('info', 'Text is drawn centred on its layer location; line wrapping (wrapWidth) is not applied.', el, 'textpos');
         return;
       }
       case 'embedScene': {

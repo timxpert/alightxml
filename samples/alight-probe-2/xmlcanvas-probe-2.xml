@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' ?><!--
+XML Canvas compatibility probe 2.
+-->
+<scene title="XML Canvas probe 2" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#ff000000" totalTime="10000" fps="30" modifiedTime="1794512520864" amver="1028425" ffver="106" am="com.alightcreative.motion/5.0.273.1028425" amplatform="android" retime="freeze" retimeAdaptFPS="false">
+  <media uri="file:///storage/emulated/0/Download/xmlcanvas-probe2-photo.png" filename="xmlcanvas-probe2-photo.png" title="xmlcanvas-probe2-photo.png" type="image/png" size="11315" orientation="0" infoUpdated="1794512520864" width="600" height="400" />
+  <shape id="800000001" label="Panel" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="540.000000,960.000000,0.000000" />
+      <scale value="5.400000,9.600000" />
+    </transform>
+    <fillColor value="#ff1c1c24" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <shape id="800000002" label="Corner 1 (80 px)" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="60.000000,60.000000,0.000000" />
+      <scale value="0.400000,0.400000" />
+    </transform>
+    <fillColor value="#ffff5a1f" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <shape id="800000003" label="Corner 2 (80 px)" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="1020.000000,60.000000,0.000000" />
+      <scale value="0.400000,0.400000" />
+    </transform>
+    <fillColor value="#ffff5a1f" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <shape id="800000004" label="Corner 3 (80 px)" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="60.000000,1860.000000,0.000000" />
+      <scale value="0.400000,0.400000" />
+    </transform>
+    <fillColor value="#ffff5a1f" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <shape id="800000005" label="Corner 4 (80 px)" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="1020.000000,1860.000000,0.000000" />
+      <scale value="0.400000,0.400000" />
+    </transform>
+    <fillColor value="#ffff5a1f" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <text id="800000006" label="Title" startTime="0" endTime="10000" fillType="color" size="24" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="540.000000,130.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>Probe 2</content>
+  </text>
+  <shape id="800000007" label="Photo 600×400 → 480×320" startTime="0" endTime="10000" fillType="media" fillImage="file:///storage/emulated/0/Download/xmlcanvas-probe2-photo.png" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="300.000000,420.000000,0.000000" />
+    </transform>
+    <property name="size" type="vec2" value="240.000000,160.000000" />
+  </shape>
+  <shape id="800000008" label="Rotated +20°" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="800.000000,420.000000,0.000000" />
+      <scale value="1.500000,0.800000" />
+      <rotation value="20.000000" />
+    </transform>
+    <fillColor value="#ff22aa78" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <text id="800000009" label="Row 1 labels" startTime="0" endTime="10000" fillType="color" size="12" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="540.000000,650.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>Photo 480×320      Tilted +20°</content>
+  </text>
+  <text id="800000010" label="Text check" startTime="0" endTime="10000" fillType="color" size="20" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="540.000000,800.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>This line is 60 px</content>
+  </text>
+  <shape id="800000011" label="Ruler 1000 px" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="540.000000,900.000000,0.000000" />
+      <scale value="5.000000,0.050000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <text id="800000012" label="Ruler label" startTime="0" endTime="10000" fillType="color" size="12" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="540.000000,960.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>bar = 1000 px wide</content>
+  </text>
+  <shape id="800000013" label="E1 .ellipse" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".ellipse">
+    <transform>
+      <location value="200.000000,1220.000000,0.000000" />
+      <scale value="1.000000,1.000000" />
+    </transform>
+    <fillColor value="#ffffcc33" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <text id="800000014" label="E1 .ellipse label" startTime="0" endTime="10000" fillType="color" size="12" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="200.000000,1380.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>E1 .ellipse</content>
+  </text>
+  <shape id="800000015" label="E2 .circle" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".circle">
+    <transform>
+      <location value="540.000000,1220.000000,0.000000" />
+      <scale value="1.000000,1.000000" />
+    </transform>
+    <fillColor value="#ffffcc33" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <text id="800000016" label="E2 .circle label" startTime="0" endTime="10000" fillType="color" size="12" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="540.000000,1380.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>E2 .circle</content>
+  </text>
+  <shape id="800000017" label="E3 .oval" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".oval">
+    <transform>
+      <location value="880.000000,1220.000000,0.000000" />
+      <scale value="1.000000,1.000000" />
+    </transform>
+    <fillColor value="#ffffcc33" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <text id="800000018" label="E3 .oval label" startTime="0" endTime="10000" fillType="color" size="12" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="880.000000,1380.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>E3 .oval</content>
+  </text>
+  <shape id="800000019" label="E4 contour closed" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill">
+    <transform>
+      <location value="200.000000,1600.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffcc33" />
+    <parameter>
+      <contour closed="true" exclude="false" d="M100,0 C100,55.228 55.228,100 0,100 C-55.228,100 -100,55.228 -100,0 C-100,-55.228 -55.228,-100 0,-100 C55.228,-100 100,-55.228 100,0 Z" />
+    </parameter>
+  </shape>
+  <shape id="800000020" label="E5 knots absolute" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill">
+    <transform>
+      <location value="540.000000,1600.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffcc33" />
+    <parameter>
+      <contour closed="true" exclude="false">
+        <knot in="100.000000,-55.228475" p="100.000000,0.000000" out="100.000000,55.228475" />
+        <knot in="55.228475,100.000000" p="0.000000,100.000000" out="-55.228475,100.000000" />
+        <knot in="-100.000000,55.228475" p="-100.000000,0.000000" out="-100.000000,-55.228475" />
+        <knot in="-55.228475,-100.000000" p="0.000000,-100.000000" out="55.228475,-100.000000" />
+      </contour>
+    </parameter>
+  </shape>
+  <shape id="800000021" label="E6 knots relative" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill">
+    <transform>
+      <location value="880.000000,1600.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffcc33" />
+    <parameter>
+      <contour closed="true" exclude="false">
+        <knot in="0.000000,-55.228475" p="100.000000,0.000000" out="0.000000,55.228475" />
+        <knot in="55.228475,0.000000" p="0.000000,100.000000" out="-55.228475,0.000000" />
+        <knot in="0.000000,55.228475" p="-100.000000,0.000000" out="0.000000,-55.228475" />
+        <knot in="-55.228475,0.000000" p="0.000000,-100.000000" out="55.228475,0.000000" />
+      </contour>
+    </parameter>
+  </shape>
+  <text id="800000022" label="E4 path label" startTime="0" endTime="10000" fillType="color" size="12" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="200.000000,1760.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>E4 path</content>
+  </text>
+  <text id="800000023" label="E5 knots label" startTime="0" endTime="10000" fillType="color" size="12" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="540.000000,1760.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>E5 knots</content>
+  </text>
+  <text id="800000024" label="E6 knots rel label" startTime="0" endTime="10000" fillType="color" size="12" font="googlefonts?name=Roboto&amp;weight=700" wrapWidth="1000" align="center">
+    <transform>
+      <location value="880.000000,1760.000000,0.000000" />
+    </transform>
+    <fillColor value="#ffffffff" />
+    <content>E6 knots rel</content>
+  </text>
+</scene>

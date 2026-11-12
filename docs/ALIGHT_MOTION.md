@@ -8,34 +8,42 @@
 
 Every rule the writer applies is listed in `src/core/alight/rules.ts` with its provenance, and appears in each compatibility report.
 
-## Evidence from a real export (Alight Motion 5.0.273, 2026-11-12)
+## On-device verification (Alight Motion 5.0.273, Android, 2026-11-12)
 
-`samples/alight/real-export-5.0.273.xml` (one rectangle, one image) established:
+Probe 1 (`samples/alight-probe/`) was imported on a phone. Every layer arrived as its own editable layer.
 
-- Rectangles: `<shape s=".rect" mediaFillMode="fill">` with `<property name="size" type="vec2" value="100,100"/>` after the fill, sized by `scale` (5.4, 9.6 → 540 × 960).
-- Images: `fillType="media"`, `fillImage` = the media uri, `size` property = the image's base size, uniform `scale`.
-- `<media uri filename title type size orientation="0" infoUpdated width height/>`, with **no `sig`**.
-- Images are referenced by the phone's gallery address (`content://media/external/images/media/…`), so the image is not in the XML and only exists on the phone that exported it.
-- Layer ids are not ordered; file order is the stacking order.
+| Item | Result |
+|---|---|
+| Image as `file:///storage/emulated/0/Download/NAME` | ✅ shows |
+| Image as the phone's own `content://…` | ✅ shows (same phone only) |
+| Image as `am-internal:///NAME` | ❌ empty |
+| Image as a bare file name | ❌ empty |
+| Image as `data:` URI (separate tool-made file) | ❌ empty |
+| `.rect` size | ✅ drawn **2 × size × scale** (size is a half-extent); the real export's size-100 / scale 5.4×9.6 rectangle is the full 1080 × 1920 canvas |
+| Text | ✅ editable; size unit ≈ canvas short side / 360 px (÷3 at 1080 wide); location = block centre |
+| Linear gradient | ✅ colours and direction correct |
+| Vector contour (`<parameter><contour d>`) | ❌ layer created but empty |
 
-A tool-made file that embedded its image as a `data:` URI imported without the image showing, so `data:` media is not used.
+Probe 2 (`samples/alight-probe-2/`) checks the corrected sizes and text, rotation direction, and tries six ellipse formats (`.ellipse`, `.circle`, `.oval`, contour with `closed`, knots absolute, knots relative).
 
-**Open question:** which image reference loads in an imported XML on another phone. Run the probe (`samples/alight-probe/`, also `public/xmlcanvas-alight-probe.zip`).
+## Evidence from a real export
+
+`samples/alight/real-export-5.0.273.xml`: `.rect` layers with `<property name="size" type="vec2">`, `<media uri filename title type size orientation infoUpdated width height>` without `sig`, images referenced by `content://` (so not inside the XML), unordered layer ids (file order = stacking order).
 
 ## Mapping
 
 | Source | Alight Motion | Provenance |
 |---|---|---|
 | Canvas size, duration, fps, background | `<scene width height exportWidth exportHeight totalTime fps bgcolor …>` | observed |
-| Axis-aligned rectangle | `<shape s=".rect">` + size property 100,100, scale = size/100, location = centre | observed (real export) |
-| Circle, ellipse, rounded/skewed rect, polygon, path | `<shape>` + `<parameter><contour d="M/L/C/Z…"/></parameter>` | documented; coordinate space **assumed** |
-| Image | `.rect` with `fillType="media" fillImage="am-internal:///SIG.ext" mediaFillMode="fill"`, size property = drawn size | structure observed; `am-internal` reference **assumed** (see probe) |
-| Text | `<text size font="googlefonts?name=…&weight=…" wrapWidth align>` + `<content>` | documented; anchoring **assumed** |
+| Axis-aligned rectangle | `<shape s=".rect">` + size property 100,100, scale = width/200, location = centre | **verified** |
+| Circle, ellipse, rounded/skewed rect, polygon, path | `<shape>` + `<parameter><contour d="M/L/C/Z…"/></parameter>` | **failed** on device (empty layer); probe 2 tests alternatives |
+| Image | `.rect` with `fillType="media" fillImage="file:///storage/emulated/0/Download/NAME"`, size property = half the drawn size | **verified** (copy images into Download first) |
+| Text | `<text size font="googlefonts?name=…&weight=…" wrapWidth align>` + `<content>`, size = px ÷ (short side/360) | **verified** at 1080 wide |
 | Group | `<embedScene fillType="intrinsic">` with a full-canvas nested `<scene>` | observed |
-| Solid / linear / radial fill | `<fillColor>` / `<gradient type startColor endColor start end>` (two colours) | observed; start/end space **assumed** |
+| Solid / linear / radial fill | `<fillColor>` / `<gradient type startColor endColor start end>` (two colours) | **verified** (linear); radial untested |
 | Position, scale, rotation, opacity | `<transform>` children | observed; rotation sign **assumed** |
 | Animation | `<kf t v>` with `t` normalised to the layer duration; rotations sampled every ≤15° | observed (conflicts with the reference, which says seconds) |
-| Media | `<media uri filename title type size orientation infoUpdated width height>`; file packaged as `SIG.ext` | attributes observed; packaging **assumed** |
+| Media | `<media uri filename title type size orientation infoUpdated width height>`; files packaged as `name-xxxxxxxx.ext` | **verified** |
 
 ## Package
 

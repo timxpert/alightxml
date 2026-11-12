@@ -4,7 +4,7 @@ XML Canvas opens XML files that describe designs, finds every image they referen
 
 Everything runs locally in the browser. Nothing is uploaded.
 
-> **Alight Motion status: untested.** The writer follows real exported projects and the community reference built from the decompiled app (format 106 / app 5.0.273), but it has **not yet been verified by importing a generated project into Alight Motion**. Every mapping rule is labelled *observed*, *documented* or *assumed*. See [docs/ALIGHT_MOTION.md](docs/ALIGHT_MOTION.md) for the test protocol.
+> **Alight Motion status: partly verified on a phone (5.0.273, Android).** Generated projects import with every layer editable. Rectangles, images (copied into the phone's Download folder), text and linear gradients display correctly; vector shapes (circles, ellipses, paths) import as empty layers for now. Every mapping rule is labelled *verified*, *failed*, *observed*, *documented* or *assumed*. See [docs/ALIGHT_MOTION.md](docs/ALIGHT_MOTION.md).
 
 ## Quick start
 

@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?><!--
 XML Canvas compatibility probe. Each lettered layer references its image differently.
 -->
-<scene title="XML Canvas probe" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#ff16161c" totalTime="10000" fps="30" modifiedTime="1794512080399" amver="1028425" ffver="106" am="com.alightcreative.motion/5.0.273.1028425" amplatform="android" retime="freeze" retimeAdaptFPS="false">
-  <media uri="am-internal:///7437fad231526949271c377c7e115de1.png" filename="7437fad231526949271c377c7e115de1.png" title="7437fad231526949271c377c7e115de1.png" type="image/png" size="8876" orientation="0" infoUpdated="1794512080399" width="600" height="600" />
-  <media uri="file:///storage/emulated/0/Download/xmlcanvas-probe-b.png" filename="xmlcanvas-probe-b.png" title="xmlcanvas-probe-b.png" type="image/png" size="9010" orientation="0" infoUpdated="1794512080399" width="600" height="600" />
-  <media uri="content://media/external/images/media/143949" filename="picture-ok.png" title="picture-ok.png" type="image/png" size="11668" orientation="0" infoUpdated="1794512080399" width="600" height="600" />
-  <media uri="xmlcanvas-probe-d.png" filename="xmlcanvas-probe-d.png" title="xmlcanvas-probe-d.png" type="image/png" size="8435" orientation="0" infoUpdated="1794512080399" width="600" height="600" />
+<scene title="XML Canvas probe" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#ff16161c" totalTime="10000" fps="30" modifiedTime="1794512474266" amver="1028425" ffver="106" am="com.alightcreative.motion/5.0.273.1028425" amplatform="android" retime="freeze" retimeAdaptFPS="false">
+  <media uri="am-internal:///7437fad231526949271c377c7e115de1.png" filename="7437fad231526949271c377c7e115de1.png" title="7437fad231526949271c377c7e115de1.png" type="image/png" size="8876" orientation="0" infoUpdated="1794512474266" width="600" height="600" />
+  <media uri="file:///storage/emulated/0/Download/xmlcanvas-probe-b.png" filename="xmlcanvas-probe-b.png" title="xmlcanvas-probe-b.png" type="image/png" size="9010" orientation="0" infoUpdated="1794512474266" width="600" height="600" />
+  <media uri="content://media/external/images/media/143949" filename="picture-ok.png" title="picture-ok.png" type="image/png" size="11668" orientation="0" infoUpdated="1794512474266" width="600" height="600" />
+  <media uri="xmlcanvas-probe-d.png" filename="xmlcanvas-probe-d.png" title="xmlcanvas-probe-d.png" type="image/png" size="8435" orientation="0" infoUpdated="1794512474266" width="600" height="600" />
   <shape id="700000001" label="Panel" startTime="0" endTime="10000" fillType="color" mediaFillMode="fill" s=".rect">
     <transform>
       <location value="540.000000,960.000000,0.000000" />

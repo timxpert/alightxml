@@ -31,8 +31,9 @@ describe('Alight Motion project XML (real 5.0.273 export)', async () => {
     const nodes = [...walkNodes(alone.design!.nodes)];
     const rect = nodes.find((n) => n.name === 'Rectangle 1')!;
     const img = nodes.find((n) => n.kind === 'image')!;
-    expect(rect.kind === 'rect' && [rect.width * decompose(rect.matrix).scaleX, rect.height * decompose(rect.matrix).scaleY]).toEqual([540, 960]);
-    expect(img.kind === 'image' && img.width * decompose(img.matrix).scaleX).toBeCloseTo(772.5, 1);
+    // Verified on device: a .rect is drawn 2 × size × scale, so this export's rectangle fills the 1080 × 1920 canvas.
+    expect(rect.kind === 'rect' && [rect.width * decompose(rect.matrix).scaleX, rect.height * decompose(rect.matrix).scaleY]).toEqual([1080, 1920]);
+    expect(img.kind === 'image' && img.width * decompose(img.matrix).scaleX).toBeCloseTo(1545, 0);
     expect([alone.design!.width, alone.design!.height]).toEqual([1080, 1920]);
   });
 });
