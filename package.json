@@ -2,7 +2,7 @@
   "name": "xml-canvas",
   "private": true,
   "version": "0.1.0",
-  "description": "XML Canvas — From XML to Visual. Interprets design XML, resolves its images and converts supported designs to Alight Motion scene XML.",
+  "description": "XML Canvas \u2014 From XML to Visual. Interprets design XML, resolves its images and converts supported designs to Alight Motion scene XML.",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tests",
     "samples": "python3 scripts/make-samples.py"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.0",
+    "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.0",

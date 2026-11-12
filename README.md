@@ -12,7 +12,8 @@ Everything runs locally in the browser. Nothing is uploaded.
 npm install
 npm run dev        # http://localhost:5173
 npm test           # parser, resolver, interpreter and Alight Motion writer tests (Vitest)
-npm run build      # type-check + production build into dist/
+npm run build      # type-check src/ + production build into dist/
+npm run typecheck  # type-check src/ and tests/
 ```
 
 The samples in `samples/` (and their copies in `public/samples/`, used by **Try a sample**) are generated with `npm run samples` (Python 3 with Pillow; python-docx for the DOCX sample).
@@ -67,6 +68,6 @@ scripts/                   make-samples.py, build-preview.mjs (offline build wit
 - `scripts/e2e.mjs`: 27 checks in Chromium on the built app, covering samples, folder upload, DOCX, parse errors, paste, remote opt-in, canvas selection, zoom, source search/folding, theme, downloading the package and checking its contents, and confirming that no script in an SVG executes.
 - Performance: a 15 MB SVG with 360,000 elements analyses in about 3 s.
 
-The UI was type-checked by the bundler only (React type definitions were not available offline when it was written); `npm run build` runs the full `tsc` check.
+`npm run build` type-checks the app (`src/`) with strict `tsc`, verified against the React 19 type definitions. `npm run typecheck` also checks the tests, which use Node's built-in modules and therefore need `@types/node`.
 
 See [docs/SUPPORTED_FORMATS.md](docs/SUPPORTED_FORMATS.md) for exactly which structures are supported and tested.
